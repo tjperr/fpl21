@@ -1,26 +1,29 @@
 from fpl import FPL
-from utils import pp
+from fpl21.utils import pp
 import aiohttp
 import asyncio
 
 
-def execute(func, *args, **kwargs):
+def execute(func):
     def new_func(*args, **kwargs):
         return asyncio.run(func(*args, *kwargs))
+
     return new_func
+
 
 @execute
 async def get_player(pid):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        player = await fpl.get_player(pid)
+        player = await fpl.get_player(pid, return_json=True)
     return player
+
 
 @execute
 async def get_team(tid):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        team = await fpl.get_team(tid)
+        team = await fpl.get_team(tid, return_json=True)
     return team
 
 
