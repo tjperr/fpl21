@@ -12,11 +12,15 @@ def execute(func):
 
 
 @execute
-async def get_player(pid):
+async def get_players(pids):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        player = await fpl.get_player(pid, return_json=True)
-    return player
+        players = await fpl.get_players(pids, return_json=True)
+    return players
+
+
+def get_player(pid):
+    return list(get_players([pid])).pop()
 
 
 @execute
@@ -29,9 +33,10 @@ async def get_team(tid):
 
 @execute
 async def get_player_summaries(pids=None):
+
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        players = await fpl.get_players(player_ids=pids, return_json=True)
+        players = await fpl.get_player_summaries(player_ids=pids, return_json=True)
     return players
 
 
@@ -43,4 +48,18 @@ async def get_fixtures():
     return fixtures
 
 
-pp(get_player_summaries([2]))
+
+
+
+# a = get_players([2])
+# b=get_player_summaries([2])
+
+# pp(a)
+# print('-'* 100)
+# pp(list(b)[0])
+# print([x for x in a if x not in b])
+# print([x for x in b if x not in a])
+
+
+# Whats the difference between player and player summary?
+# what the core here for model building and prediction
