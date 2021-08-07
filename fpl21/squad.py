@@ -1,13 +1,16 @@
-from fpl21.data import get_position, get_name, name_list
+from fpl21.data import get_name, get_position, get_team, name_list
+import collections
 
 
 class Squad:
-    def __init__(self, team):
-        self.goalkeepers = [pid for pid in team if get_position(pid) == 1]
-        self.defenders = [pid for pid in team if get_position(pid) == 2]
-        self.midfielders = [pid for pid in team if get_position(pid) == 3]
-        self.attackers = [pid for pid in team if get_position(pid) == 4]
-        self.players = team
+    def __init__(self, pids):
+
+        
+        self.goalkeepers = [pid for pid in pids if get_position(pid) == 1]
+        self.defenders = [pid for pid in pids if get_position(pid) == 2]
+        self.midfielders = [pid for pid in pids if get_position(pid) == 3]
+        self.attackers = [pid for pid in pids if get_position(pid) == 4]
+        self.players = pids
         self.validate()
 
     def validate(self):
@@ -25,6 +28,17 @@ class Squad:
             raise ValueError(
                 f"""3 attackers required, you have {len(self.attackers)}"""
             )
+
+        teams = collections.Counter([get_team(pid) for pid in self.players])
+        for k, v in teams.items():
+            if v > 3:
+                raise ValueError(
+                    f"""At most three players from one PL team allowed.
+                    You have {v} players from team {k}:
+                    {name_list([p for p in self.players if get_team(p) == k])})
+                """
+                )
+
         return
 
     def select_team(self, pids):
@@ -60,7 +74,7 @@ class Squad:
                 f"must select 1 - 3 attackers, {len(atts)} given: {name_list(atts)}"
             )
 
-        # TODO: Need to validate not more than three players from the same team
+        self.selection = pids
 
     def __repr__(self):
 

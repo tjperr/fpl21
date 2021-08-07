@@ -1,7 +1,8 @@
+import asyncio
+
+import aiohttp
 from fpl import FPL
 from fpl21.utils import pp
-import aiohttp
-import asyncio
 
 
 def execute(func):

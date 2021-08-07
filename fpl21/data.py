@@ -16,5 +16,10 @@ def get_name(pid):
     return players_dict[pid]["first_name"] + " " + players_dict[pid]["second_name"]
 
 
+def get_team(pid):
+    return players_dict[pid]["team_code"]
+
+
 def name_list(pids):
     return [str(pid) + ": " + get_name(pid) for pid in pids]
+
