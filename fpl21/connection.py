@@ -48,9 +48,6 @@ async def get_fixtures():
     return fixtures
 
 
-
-
-
 # a = get_players([2])
 # b=get_player_summaries([2])
 
