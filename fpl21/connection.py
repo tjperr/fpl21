@@ -34,7 +34,12 @@ async def get_team(tid):
 
 @execute
 async def get_player_summaries(pids=None):
-
+    """
+    returns a list of dicts, dict elements are:
+        fixtures -- remaining fixtures
+        history -- fixture history with performance
+        history_past -- previous seasons performance stats
+    """
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         players = await fpl.get_player_summaries(player_ids=pids, return_json=True)

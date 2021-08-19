@@ -1,4 +1,4 @@
-from fpl21.connection import get_player, get_players
+from fpl21.connection import get_player, get_player_summaries, get_players
 from fpl21.utils import pp
 
 players_list = get_players(None)
@@ -14,6 +14,11 @@ def get_position(pid):
 
 def get_name(pid):
     return players_dict[pid]["first_name"] + " " + players_dict[pid]["second_name"]
+
+
+def get_value(pid):
+    #return players_dict[pid]["now_cost"] # buying price
+    return get_player_summaries([pid])[0]['history'].pop()['value']
 
 
 def get_team(pid):

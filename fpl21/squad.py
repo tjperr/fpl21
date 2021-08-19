@@ -1,10 +1,9 @@
-from fpl21.data import get_name, get_position, get_team, name_list
+from fpl21.data import get_name, get_position, get_value, get_team, name_list
 import collections
 
 
 class Squad:
     def __init__(self, pids):
-
         self.players = pids
         self.validate()
 
@@ -23,6 +22,9 @@ class Squad:
     @property
     def attackers(self):
         return [pid for pid in self.players if get_position(pid) == 4]
+
+    def value(self):
+        return sum(get_value(pid) for pid in self.players)
 
     def validate(self):
         if len(self.goalkeepers) != 2:
