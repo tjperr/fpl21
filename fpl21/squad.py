@@ -5,35 +5,49 @@ import collections
 class Squad:
     def __init__(self, pids):
 
-        
-        self.goalkeepers = [pid for pid in pids if get_position(pid) == 1]
-        self.defenders = [pid for pid in pids if get_position(pid) == 2]
-        self.midfielders = [pid for pid in pids if get_position(pid) == 3]
-        self.attackers = [pid for pid in pids if get_position(pid) == 4]
         self.players = pids
         self.validate()
+
+    @property
+    def goalkeepers(self):
+        return [pid for pid in self.players if get_position(pid) == 1]
+
+    @property
+    def defenders(self):
+        return [pid for pid in self.players if get_position(pid) == 2]
+
+    @property
+    def midfielders(self):
+        return [pid for pid in self.players if get_position(pid) == 3]
+
+    @property
+    def attackers(self):
+        return [pid for pid in self.players if get_position(pid) == 4]
 
     def validate(self):
         if len(self.goalkeepers) != 2:
             raise ValueError(
-                f"2 goalkeepers required, you have {len(self.goalkeepers)}"
+                f"2 goalkeepers required, you have {len(self.goalkeepers)}: {name_list(self.goalkeepers)}"
             )
         if len(self.defenders) != 5:
-            raise ValueError(f"5 defenders required, you have {len(self.defenders)}")
+            raise ValueError(
+                f"5 defenders required, you have {len(self.defenders)}: {name_list(self.defenders)}"
+            )
         if len(self.midfielders) != 5:
             raise ValueError(
-                f"5 midfielders required, you have {len(self.midfielders)}"
+                f"5 midfielders required, you have {len(self.midfielders)}: {name_list(self.midfielders)}"
             )
         if len(self.attackers) != 3:
             raise ValueError(
-                f"""3 attackers required, you have {len(self.attackers)}"""
+                f"""3 attackers required, you have {len(self.attackers)}: {name_list(self.attackers)}"""
             )
 
         teams = collections.Counter([get_team(pid) for pid in self.players])
         for k, v in teams.items():
             if v > 3:
                 raise ValueError(
-                    f"""At most three players from one PL team allowed.
+                    f"""
+                    At most three players from one PL team allowed.
                     You have {v} players from team {k}:
                     {name_list([p for p in self.players if get_team(p) == k])})
                 """
@@ -50,14 +64,14 @@ class Squad:
             if p not in self.players:
                 raise ValueError(f"player {name_list([p])} not in squad!")
 
-        gks = [p for p in pids if p in self.goalkeepers]
-        defs = [p for p in pids if p in self.defenders]
-        mids = [p for p in pids if p in self.midfielders]
-        atts = [p for p in pids if p in self.attackers]
+        gks = [p for p in pids if get_position(p) == 1]
+        defs = [p for p in pids if get_position(p) == 2]
+        mids = [p for p in pids if get_position(p) == 3]
+        atts = [p for p in pids if get_position(p) == 4]
 
         if len(gks) != 1:
             raise ValueError(
-                f"must select one goalkeeper, {len(gks)} given: {name_list(gks)}"
+                f"must select one goalkeeper, {len(gks)} given:{name_list(gks)}"
             )
         if len(defs) not in [3, 4, 5]:
             raise ValueError(

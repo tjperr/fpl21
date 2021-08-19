@@ -22,4 +22,3 @@ def get_team(pid):
 
 def name_list(pids):
     return [str(pid) + ": " + get_name(pid) for pid in pids]
-

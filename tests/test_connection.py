@@ -21,7 +21,7 @@ def test_get_all_players():
 
 def test_get_player_summaries():
     obj = get_player_summaries([1])
-    assert len(list(obj)[0]["fixtures"]) == 19 * 2
+    assert "fixtures" in list(obj)[0].keys()
 
 
 def test_get_fixtures():
