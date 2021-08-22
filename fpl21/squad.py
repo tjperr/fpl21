@@ -1,6 +1,6 @@
 import collections
 
-from fpl21.data import get_position, get_team, get_value, get_name, name_list
+from fpl21.data import get_name, get_position, get_team, get_value, name_list
 
 
 def check_valid_number(pids, pos_name, valid_range, valid_range_name):

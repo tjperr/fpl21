@@ -1,11 +1,12 @@
 import random
+from collections import defaultdict
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from collections import defaultdict
+from fpl21.data import get_name, get_player, get_player_ids, get_position
 from fpl21.squad import Squad
-from fpl21.data import get_player, get_player_ids, get_position, get_name
 
 
 def player_score(pid):
@@ -14,14 +15,14 @@ def player_score(pid):
 
 score_dict = defaultdict(list)
 
-# MC for team selection
+# MC for transfer/ team selection
 for _ in tqdm(range(100_000), desc="Simulating"):
 
     my_squad = Squad(
         [30, 80, 275, 198, 110, 252, 62, 22, 35, 196, 277, 359, 413, 337, 189]
     )
 
-    # Probably want to weight transfers too - sample space is otherwise too large
+    # TODO: Weight transfers by expected points - sample space is otherwise too large
     transfer_in = random.choice(get_player_ids())
     transfer_out = random.choice(
         my_squad.get_players_with_position(get_position(transfer_in))
@@ -61,5 +62,5 @@ scores_df = pd.DataFrame(
     }
 )
 
-# print the best 11 playes, no checking whether this is a valid team atm
-print(scores_df.sort_values(by="avg_score", ascending=False)[:11])
+# print the best 11 transfers
+print(scores_df.sort_values(by="avg_score", ascending=False)[:10])

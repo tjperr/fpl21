@@ -1,5 +1,6 @@
-from fpl21.squad import Squad
 import pytest
+
+from fpl21.squad import Squad
 
 GKS = [1, 2]  # 1, 2 = Arsenal
 DEFS = [284, 340, 252, 237, 16]  # 16 = Arsenal

@@ -1,10 +1,8 @@
 from typing import List
+
 import pytest
-from fpl21.connection import (
-    _get_players,
-    _get_fixtures,
-    _get_team,
-)
+
+from fpl21.connection import _get_fixtures, _get_players, _get_team
 
 # Don't run these tests by default:
 reason = "Limit # requests to fpl API"
