@@ -1,17 +1,18 @@
+import json
+
 from fpl21.connection import _get_players
 from fpl21.utils import pp
-import json
 
 # Load the players_list from file or call the API
 try:
-    with open('players_list.json', "r") as f:
-        print('loading players list from file')
+    with open("players_list.json", "r") as f:
+        print("loading players list from file")
         players_list = json.load(f)
 except FileNotFoundError:
-    print('players list not found, calling API')
+    print("players list not found, calling API")
     players_list = _get_players()
-    
-    print('Saving to file players_list.json ...')
+
+    print("Saving to file players_list.json ...")
 
     with open("players_list.json", "w") as out_file:
         json.dump(players_list, out_file)
@@ -37,7 +38,7 @@ def get_name(pid):
 
 def get_value(pid):
     # return players_info_dict[pid]["now_cost"] # buying price
-    #latest value
+    # latest value
     return players_info_dict[pid]["history"].pop()["value"]
 
 
