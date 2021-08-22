@@ -24,6 +24,18 @@ for k, v in players_info_dict.items():
     v["name"] = v["first_name"] + " " + v["second_name"]
 
 
+def get_player_ids():
+    return list(players_info_dict.keys())
+
+
+def get_player(pid):
+    return players_info_dict[pid]
+
+
+def name_list(pids):
+    return "\n\t".join([str(pid) + ": " + get_name(pid) for pid in pids])
+
+
 def get_position(pid):
     return players_info_dict[pid]["element_type"]
 
@@ -44,7 +56,3 @@ def get_value(pid):
 
 def get_team(pid):
     return players_info_dict[pid]["team_code"]
-
-
-def name_list(pids):
-    return "\n\t".join([str(pid) + ": " + get_name(pid) for pid in pids])

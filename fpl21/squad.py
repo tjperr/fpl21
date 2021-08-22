@@ -1,7 +1,6 @@
 import collections
-import random
 
-from fpl21.data import get_position, get_team, get_value, name_list
+from fpl21.data import get_position, get_team, get_value, get_name, name_list
 
 
 def check_valid_number(pids, pos_name, valid_range, valid_range_name):
@@ -92,20 +91,6 @@ class Squad:
 
         self.selection = pids
 
-    def __repr__(self):
-
-        return f"""
-    Team of {len(self.players)} players:
-    Goalkeepers:
-        {name_list(self.goalkeepers)}
-    Defenders:
-        {name_list(self.defenders)}
-    Midfielders:
-        {name_list(self.midfielders)}
-    Attckers:
-        {name_list(self.attackers)}
-    """
-
     def transfer(self, out_pid, in_pid):
 
         if out_pid not in self.players:
@@ -134,3 +119,27 @@ class Squad:
 
         check_n_from_pl_team(new_pids)
         self.players = new_pids
+
+    def get_players_with_position(self, pos):
+        if pos == 1:
+            return self.goalkeepers
+        if pos == 2:
+            return self.defenders
+        if pos == 3:
+            return self.midfielders
+        if pos == 4:
+            return self.attackers
+
+    def __repr__(self):
+
+        return f"""
+    Team of {len(self.players)} players:
+    Goalkeepers:
+        {name_list(self.goalkeepers)}
+    Defenders:
+        {name_list(self.defenders)}
+    Midfielders:
+        {name_list(self.midfielders)}
+    Attckers:
+        {name_list(self.attackers)}
+    """
