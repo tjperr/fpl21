@@ -1,4 +1,4 @@
-from fpl21.data import get_name, get_position, get_value, get_team, name_list
+from fpl21.data import get_position, get_value, get_team, name_list
 import collections
 
 
@@ -67,16 +67,21 @@ class Squad:
                 raise ValueError(f"player {name_list([p])} not in squad!")
 
         for pos, pos_name, valid_range, valid_range_name in [
-            ([p for p in pids if get_position(p) == 1], "goalkeeper", [1], 'one'),
-            ([p for p in pids if get_position(p) == 2], "defenders", [3, 4, 5], '3-5'),
-            ([p for p in pids if get_position(p) == 3], "midfielders", [3, 4, 5], '3-5'),
-            ([p for p in pids if get_position(p) == 4], "attackers", [1, 2, 3], '1-3'),
+            ([p for p in pids if get_position(p) == 1], "goalkeeper", [1], "one"),
+            ([p for p in pids if get_position(p) == 2], "defenders", [3, 4, 5], "3-5"),
+            (
+                [p for p in pids if get_position(p) == 3],
+                "midfielders",
+                [3, 4, 5],
+                "3-5",
+            ),
+            ([p for p in pids if get_position(p) == 4], "attackers", [1, 2, 3], "1-3"),
         ]:
             if len(pos) not in valid_range:
                 raise ValueError(
                     f"must select {valid_range_name} {pos_name}, {len(pos)} given:{name_list(pos)}"
                 )
-        
+
         self.selection = pids
 
     def __repr__(self):

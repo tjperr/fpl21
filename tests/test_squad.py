@@ -36,6 +36,7 @@ def test_squad_selection():
 
     s.select_team(VALID_SELECTION)
 
+
 def test_position_functions():
     s = Squad(VALID_SQUAD)
 
