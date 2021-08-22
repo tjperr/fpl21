@@ -1,4 +1,5 @@
 import collections
+import random
 
 from fpl21.data import get_position, get_team, get_value, name_list
 

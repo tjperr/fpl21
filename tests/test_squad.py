@@ -23,7 +23,7 @@ def test_squad_creation():
     Squad(VALID_SQUAD)
 
 
-def test_squad_selection():
+def test_team_selection():
 
     s = Squad(VALID_SQUAD)
 
