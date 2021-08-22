@@ -98,8 +98,23 @@ class Squad:
         {name_list(self.attackers)}
     """
 
-    # def transfer(in_id, out_id):
-    #     if position(in_id) != position(out_id):
-    #         raise ValueError("Position of transfer player doesn't match")
-    #     else:
-    #         self.team[]
+    def transfer(self, out_pid, in_pid):
+
+        if out_pid not in self.players:
+            raise ValueError(
+                f"out player {name_list([out_pid])} not in squad!"
+            )
+
+        if in_pid in self.players:
+                    raise ValueError(
+                        f"in player {name_list([in_pid])} already in squad!"
+                    )
+                
+        if get_position(in_pid) != get_position(out_pid):
+            raise ValueError(
+                f"""Position of transfer player doesn't match:
+                In: {name_list([in_pid])} (position {(get_position(in_pid))})
+                Out: {name_list([out_pid])} (position {(get_position(out_pid))})
+                """
+            )
+        

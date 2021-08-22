@@ -1,7 +1,21 @@
-from fpl21.connection import _get_player, _get_players
+from fpl21.connection import _get_players
 from fpl21.utils import pp
+import json
 
-players_list = _get_players()
+# Load the players_list from file or call the API
+try:
+    with open('players_list.json', "r") as f:
+        print('loading players list from file')
+        players_list = json.load(f)
+except FileNotFoundError:
+    print('players list not found, calling API')
+    players_list = _get_players()
+    
+    print('Saving to file players_list.json ...')
+
+    with open("players_list.json", "w") as out_file:
+        json.dump(players_list, out_file)
+
 players_info_dict = {x["id"]: x for x in players_list}
 
 

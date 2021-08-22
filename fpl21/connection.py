@@ -47,17 +47,3 @@ async def _get_team(tid):
         fpl = FPL(session)
         team = await fpl.get_team(tid, return_json=True)
     return team
-
-
-# a = get_players([2])
-# b=get_player_summaries([2])
-
-# pp(a)
-# print('-'* 100)
-# pp(list(b)[0])
-# print([x for x in a if x not in b])
-# print([x for x in b if x not in a])
-
-
-# Whats the difference between player and player summary?
-# what the core here for model building and prediction
