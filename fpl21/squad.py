@@ -12,7 +12,7 @@ def check_valid_number(pids, pos_name, valid_range, valid_range_name):
 
 def check_n_from_pl_team(pids):
     """
-    Check not too many playesfrom the same pl team
+    Check at most three players from the same pl team
     """
     teams = collections.Counter([get_team(pid) for pid in pids])
     for k, v in teams.items():
@@ -29,9 +29,11 @@ def check_n_from_pl_team(pids):
 
 
 class Squad:
-    def __init__(self, pids):
+    def __init__(self, pids, cash_in_bank):
         self.players = pids
         self.validate()
+
+        self.cash_in_bank = cash_in_bank
 
     def validate(self):
         check_n_from_pl_team(self.players)
@@ -108,9 +110,14 @@ class Squad:
                 """
             )
 
-        #
-        # TODO check have enough money!
-        #
+        if get_value(in_pid) > get_value(out_pid) + self.cash_in_bank:
+            raise ValueError(
+                f"""Not enough money!
+                In: {name_list([in_pid])} £{get_value(in_pid)}
+                Out: {name_list([out_pid])} £{get_value(out_pid)}
+                Cash in Bank: {self.cash_in_bank}
+                """
+            )
 
         # [:] because don't want to modify self.players in place
         new_pids = self.players[:]
@@ -118,17 +125,9 @@ class Squad:
         new_pids.append(in_pid)
 
         check_n_from_pl_team(new_pids)
-        self.players = new_pids
 
-    def get_players_with_position(self, pos):
-        if pos == 1:
-            return self.goalkeepers
-        if pos == 2:
-            return self.defenders
-        if pos == 3:
-            return self.midfielders
-        if pos == 4:
-            return self.attackers
+        self.cash_in_bank += (get_value(out_pid) - get_value(in_pid))
+        self.players = new_pids
 
     def __repr__(self):
 

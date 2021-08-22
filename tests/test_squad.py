@@ -5,7 +5,7 @@ from fpl21.squad import Squad
 GKS = [1, 2]  # 1, 2 = Arsenal
 DEFS = [284, 340, 252, 237, 16]  # 16 = Arsenal
 MIDS = [174, 230, 233, 277, 359]
-ATTS = [357, 177, 149]
+ATTS = [109, 177, 149]
 
 VALID_SQUAD = GKS + DEFS + MIDS + ATTS
 INVALID_SQUAD = VALID_SQUAD[:14] + [20]  # 4 Arsenal players
@@ -14,19 +14,19 @@ VALID_SELECTION = GKS[:1] + DEFS[:4] + MIDS[:4] + ATTS[:2]
 
 def test_squad_creation():
     with pytest.raises(ValueError) as e:
-        Squad(VALID_SQUAD[:-1])  # not enough players
+        Squad(VALID_SQUAD[:-1], 10)  # not enough players
     assert "must select three attackers" in str(e.value)
 
     with pytest.raises(ValueError) as e:
-        Squad(INVALID_SQUAD)  # too many Arsenal players
+        Squad(INVALID_SQUAD, 10)  # too many Arsenal players
     assert "At most three players from one PL team allowed" in str(e.value)
 
-    Squad(VALID_SQUAD)
+    Squad(VALID_SQUAD, 10)
 
 
 def test_team_selection():
 
-    s = Squad(VALID_SQUAD)
+    s = Squad(VALID_SQUAD, 10)
 
     with pytest.raises(ValueError) as e:
         s.select_team([1, 2, 3])
@@ -44,7 +44,7 @@ def test_team_selection():
 
 
 def test_position_attributes():
-    s = Squad(VALID_SQUAD)
+    s = Squad(VALID_SQUAD, 10)
 
     assert s.goalkeepers == GKS
     assert s.defenders == DEFS
@@ -54,25 +54,29 @@ def test_position_attributes():
 
 def test_transfer_input_checks():
     with pytest.raises(ValueError) as e:
-        Squad(VALID_SQUAD).transfer(1, 100)
+        Squad(VALID_SQUAD, 10).transfer(1, 100)
     assert "Position of transfer player doesn't match" in str(e.value)
 
     with pytest.raises(ValueError) as e:
-        Squad(VALID_SQUAD).transfer(1, 2)
+        Squad(VALID_SQUAD, 10).transfer(1, 2)
     assert "already in squad" in str(e.value)
 
     with pytest.raises(ValueError) as e:
-        Squad(VALID_SQUAD).transfer(3, 4)
+        Squad(VALID_SQUAD, 10).transfer(3, 4)
     assert "not in squad" in str(e.value)
 
     with pytest.raises(ValueError) as e:
-        Squad(VALID_SQUAD).transfer(149, 20)
+        Squad(VALID_SQUAD, 10).transfer(149, 20)
     assert "At most three players from one PL team allowed" in str(e.value)
+
+    with pytest.raises(ValueError) as e:
+        Squad(VALID_SQUAD, 0).transfer(109, 357)
+    assert "Not enough money" in str(e.value)
 
 
 def test_transfer_works_as_expected():
 
-    s = Squad(VALID_SQUAD)
+    s = Squad(VALID_SQUAD, 10)
     s.transfer(1, 80)
 
     assert 1 not in s.players

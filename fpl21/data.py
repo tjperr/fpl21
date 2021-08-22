@@ -51,7 +51,7 @@ def get_name(pid):
 def get_value(pid):
     # return players_info_dict[pid]["now_cost"] # buying price
     # latest value
-    return players_info_dict[pid]["history"].pop()["value"]
+    return players_info_dict[pid]["history"][-1]["value"]
 
 
 def get_team(pid):
