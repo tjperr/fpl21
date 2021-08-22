@@ -29,11 +29,12 @@ def check_n_from_pl_team(pids):
 
 
 class Squad:
-    def __init__(self, pids, cash_in_bank):
+    def __init__(self, pids, cash_in_bank, validate=True):
         self.players = pids
-        self.validate()
-
         self.cash_in_bank = cash_in_bank
+
+        if validate:
+            self.validate()
 
     def validate(self):
         check_n_from_pl_team(self.players)
@@ -126,7 +127,7 @@ class Squad:
 
         check_n_from_pl_team(new_pids)
 
-        self.cash_in_bank += (get_value(out_pid) - get_value(in_pid))
+        self.cash_in_bank += get_value(out_pid) - get_value(in_pid)
         self.players = new_pids
 
     def __repr__(self):
