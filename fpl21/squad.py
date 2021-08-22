@@ -66,44 +66,32 @@ class Squad:
             if p not in self.players:
                 raise ValueError(f"player {name_list([p])} not in squad!")
 
-        gks = [p for p in pids if get_position(p) == 1]
-        defs = [p for p in pids if get_position(p) == 2]
-        mids = [p for p in pids if get_position(p) == 3]
-        atts = [p for p in pids if get_position(p) == 4]
-
-        if len(gks) != 1:
-            raise ValueError(
-                f"must select one goalkeeper, {len(gks)} given:{name_list(gks)}"
-            )
-        if len(defs) not in [3, 4, 5]:
-            raise ValueError(
-                f"must select 3 - 5 defenders, {len(defs)} given: {name_list(defs)}"
-            )
-
-        if len(mids) not in [3, 4, 5]:
-            raise ValueError(
-                f"must select 3 - 5 midfielders, {len(mids)} given: {name_list(mids)}"
-            )
-
-        if len(atts) not in [1, 2, 3]:
-            raise ValueError(
-                f"must select 1 - 3 attackers, {len(atts)} given: {name_list(atts)}"
-            )
-
+        for pos, pos_name, valid_range, valid_range_name in [
+            ([p for p in pids if get_position(p) == 1], "goalkeeper", [1], 'one'),
+            ([p for p in pids if get_position(p) == 2], "defenders", [3, 4, 5], '3-5'),
+            ([p for p in pids if get_position(p) == 3], "midfielders", [3, 4, 5], '3-5'),
+            ([p for p in pids if get_position(p) == 4], "attackers", [1, 2, 3], '1-3'),
+        ]:
+            if len(pos) not in valid_range:
+                raise ValueError(
+                    f"must select {valid_range_name} {pos_name}, {len(pos)} given:{name_list(pos)}"
+                )
+        
         self.selection = pids
 
     def __repr__(self):
 
-        gks = ", ".join(name_list(self.goalkeepers))
-        defs = ", ".join(name_list(self.defenders))
-        mid = ", ".join(name_list(self.midfielders))
-        att = ", ".join(name_list(self.attackers))
-        return f""" Team of {len(self.players)} players:
-        Goalkeepers: {gks}
-        Defenders: {defs}
-        Midfielders: {mid}
-        Attckers: {att}
-        """
+        return f"""
+    Team of {len(self.players)} players:
+    Goalkeepers:
+        {name_list(self.goalkeepers)}
+    Defenders:
+        {name_list(self.defenders)}
+    Midfielders:
+        {name_list(self.midfielders)}
+    Attckers:
+        {name_list(self.attackers)}
+    """
 
     # def transfer(in_id, out_id):
     #     if position(in_id) != position(out_id):
