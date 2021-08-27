@@ -5,10 +5,18 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from fpl21.data import get_name, get_player, get_player_ids, get_position, get_value, name_list
+from fpl21.data import (
+    get_name,
+    get_player,
+    get_player_ids,
+    get_position,
+    get_value,
+    name_list,
+)
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
+
 
 def player_score(pid):
     return float(get_player(pid)["ep_next"])
@@ -91,7 +99,6 @@ for _ in tqdm(range(100_000), desc="Simulating"):
             )
         )
     )
-
 
     my_squad.select_team(team)
     score = sum(player_score(pid) for pid in my_squad.selection)
