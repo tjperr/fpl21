@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from fpl21.data import get_name, get_player, get_player_ids, get_position, get_value
+from fpl21.data import get_name, get_player, get_player_ids, get_position, get_value, name_list
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
@@ -33,19 +33,16 @@ for _ in tqdm(range(100_000), desc="Simulating"):
 
     # TODO: Weight transfers by expected points - sample space is otherwise too large
     out_pid = random.choice(my_squad.players)
-    out_price, out_pos, cash = (
-        get_value(out_pid),
-        get_position(out_pid),
-        my_squad.cash_in_bank,
-    )
+    available_cash = get_value(out_pid) + my_squad.cash_in_bank
+    out_pos = get_position(out_pid)
 
     options = [
         pid
         for pid in get_player_ids()
-        if (get_position(pid) == out_pos) and (get_value(pid) <= out_price + cash)
+        if (get_position(pid) == out_pos) and (get_value(pid) <= available_cash)
     ]
     in_pid = random.choices(options, weights=[player_score(pid) for pid in options])[0]
-    
+
     try:
         my_squad.transfer(out_pid, in_pid)
         param = get_name(out_pid) + " -> " + get_name(in_pid)
@@ -94,6 +91,7 @@ for _ in tqdm(range(100_000), desc="Simulating"):
             )
         )
     )
+
 
     my_squad.select_team(team)
     score = sum(player_score(pid) for pid in my_squad.selection)
