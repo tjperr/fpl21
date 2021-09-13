@@ -16,6 +16,10 @@ from fpl21.data import (
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
+SQUAD = [30, 80, 275, 262, 110, 245, 62, 272, 35, 144, 277, 359, 413, 337, 189]
+CASH = 4
+
+print(Squad(SQUAD, CASH))
 
 
 def player_score(pid):
@@ -29,15 +33,10 @@ def dist(weights):
 
 score_dict = defaultdict(list)
 
-
 # MC for transfer/ team selection
 for _ in tqdm(range(100_000), desc="Simulating"):
 
-    my_squad = Squad(
-        [30, 80, 275, 262, 110, 245, 62, 22, 35, 196, 277, 359, 413, 337, 189],
-        9,
-        validate=False,
-    )
+    my_squad = Squad(SQUAD, CASH, validate=False)
 
     # TODO: Weight transfers by expected points - sample space is otherwise too large
     out_pid = random.choice(my_squad.players)
@@ -114,6 +113,6 @@ scores_df = pd.DataFrame(
     }
 )
 
-# print the best 11 transfers
+# print the best 10 transfers
 print(scores_df.sort_values(by="avg_score", ascending=False)[:10])
 print(scores_df[scores_df.param == NO_TRANSFER])
