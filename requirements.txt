@@ -3,3 +3,5 @@ ipykernel
 fpl
 pytest
 tqdm
+scikitlearn
+matplotlib
