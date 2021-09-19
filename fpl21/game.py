@@ -5,14 +5,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from fpl21.data import (
-    get_name,
-    get_player,
-    get_player_ids,
-    get_position,
-    get_value,
-    name_list,
-)
+from fpl21.data import get_name, get_player, get_player_ids, get_position, get_value
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
