@@ -129,3 +129,19 @@ def create_team_stats_df():
             "team_goals_scored_per_game",
         ]
     ]
+
+
+def create_fixtures_df():
+
+    entries = []
+    for k, v in players_info_dict.items():
+        fixtures = v["fixtures"]
+        for f in fixtures:
+            f["element"] = k
+            entries.append(f)
+
+    df = pd.DataFrame(entries)
+    return df
+
+
+create_fixtures_df()
