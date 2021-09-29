@@ -11,7 +11,7 @@ from fpl21.utils import pp
 
 # Load the players_list from file or call the API
 try:
-    with open("players_list.json", "r") as f:
+    with open("fpl21/players_list.json", "r") as f:
         print("loading players list from file")
         players_list = json.load(f)
 except FileNotFoundError:
@@ -20,7 +20,7 @@ except FileNotFoundError:
 
     print("Saving to file players_list.json ...")
 
-    with open("players_list.json", "w") as out_file:
+    with open("fpl21/players_list.json", "w") as out_file:
         json.dump(players_list, out_file)
 
 players_info_dict = {x["id"]: x for x in players_list}
@@ -140,7 +140,7 @@ def create_fixtures_df():
             f["element"] = k
             entries.append(f)
 
-    df = pd.DataFrame(entries)
+    df = pd.DataFrame(entries).rename(columns={"event": "round"})
     return df
 
 

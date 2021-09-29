@@ -3,20 +3,24 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
+import json
 from tqdm import tqdm
 
 from fpl21.data import get_name, get_player, get_player_ids, get_position, get_value
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
-SQUAD = [30, 80, 275, 262, 110, 245, 62, 233, 35, 144, 277, 359, 413, 337, 307]
-CASH = 4
+SQUAD = [30, 80, 275, 262, 110, 245, 62, 233, 35, 144, 272, 359, 413, 337, 307]
+CASH = 10
 
-print(Squad(SQUAD, CASH))
+with open("fpl21/predicted_points.json", "r") as f:
+    print("loading points from file")
+    predicted_points = json.load(f)
 
 
 def player_score(pid):
-    return float(get_player(pid)["ep_next"])
+    return float(predicted_points[str(pid)])
+    # return float(get_player(pid)["ep_next"])
 
 
 def dist(weights):
@@ -52,10 +56,21 @@ def select_team(squad, weight_function):
     return [x for sublist in team for x in sublist]
 
 
+s = Squad(SQUAD, CASH)
+print(s)
+print(
+    pd.DataFrame(
+        {
+            "players": [f"{get_name(p)} ({p})" for p in s.players],
+            "score": [player_score(p) for p in s.players],
+        }
+    ).sort_values("score")
+)
+
 score_dict = defaultdict(list)
 
 # MC for transfer/ team selection
-for _ in tqdm(range(10_000), desc="Simulating"):
+for _ in tqdm(range(100_000), desc="Simulating"):
 
     my_squad = Squad(SQUAD, CASH, validate=False)
 
@@ -73,7 +88,7 @@ for _ in tqdm(range(10_000), desc="Simulating"):
 
     try:
         my_squad.transfer(out_pid, in_pid)
-        param = get_name(out_pid) + " -> " + get_name(in_pid)
+        param = f"{get_name(out_pid)} ({out_pid}) -> {get_name(in_pid)} ({in_pid})"
 
     except ValueError:
         param = NO_TRANSFER
@@ -97,5 +112,7 @@ scores_df = pd.DataFrame(
 )
 
 # print the best 10 transfers
-print(scores_df.sort_values(by="avg_score", ascending=False)[:10])
+print(
+    scores_df[scores_df["count"] > 5].sort_values(by="avg_score", ascending=False)[:10]
+)
 print(scores_df[scores_df.param == NO_TRANSFER])
