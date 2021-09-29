@@ -9,7 +9,7 @@ from fpl21.data import get_name, get_player, get_player_ids, get_position, get_v
 from fpl21.squad import Squad
 
 NO_TRANSFER = "NO_TRANSFER"
-SQUAD = [30, 80, 275, 262, 110, 245, 62, 272, 35, 144, 277, 359, 413, 337, 189]
+SQUAD = [30, 80, 275, 262, 110, 245, 62, 233, 35, 144, 277, 359, 413, 337, 307]
 CASH = 4
 
 print(Squad(SQUAD, CASH))
@@ -24,10 +24,38 @@ def dist(weights):
     return [x / sum(_weights) for x in _weights]
 
 
+def select_team(squad, weight_function):
+    formation = random.choice(
+        [
+            [1, 3, 4, 3],
+            [1, 3, 5, 2],
+            [1, 4, 3, 3],
+            [1, 4, 4, 2],
+            [1, 4, 5, 1],
+            [1, 5, 3, 2],
+            [1, 5, 4, 1],
+        ]
+    )
+
+    team = [
+        np.random.choice(
+            players,
+            formation[i],
+            replace=False,
+            p=dist([weight_function(pid) for pid in players]),
+        )
+        for i, players in enumerate(
+            [squad.goalkeepers, squad.defenders, squad.midfielders, squad.attackers]
+        )
+    ]
+
+    return [x for sublist in team for x in sublist]
+
+
 score_dict = defaultdict(list)
 
 # MC for transfer/ team selection
-for _ in tqdm(range(100_000), desc="Simulating"):
+for _ in tqdm(range(10_000), desc="Simulating"):
 
     my_squad = Squad(SQUAD, CASH, validate=False)
 
@@ -49,48 +77,10 @@ for _ in tqdm(range(100_000), desc="Simulating"):
 
     except ValueError:
         param = NO_TRANSFER
-        pass
 
     # TODO: Weight team selection based on expected points, to avoid suggesting a squad where every
     # selected team does well (Points on the bench dont matter!)
-    formation = random.choice(
-        [[3, 4, 3], [3, 5, 2], [4, 3, 3], [4, 4, 2], [4, 5, 1], [5, 3, 2], [5, 4, 1]]
-    )
-
-    team = (
-        list(
-            np.random.choice(
-                my_squad.goalkeepers,
-                1,
-                replace=False,
-                p=dist([player_score(pid) for pid in my_squad.goalkeepers]),
-            )
-        )
-        + list(
-            np.random.choice(
-                my_squad.defenders,
-                formation[0],
-                replace=False,
-                p=dist([player_score(pid) for pid in my_squad.defenders]),
-            )
-        )
-        + list(
-            np.random.choice(
-                my_squad.midfielders,
-                formation[1],
-                replace=False,
-                p=dist([player_score(pid) for pid in my_squad.midfielders]),
-            )
-        )
-        + list(
-            np.random.choice(
-                my_squad.attackers,
-                formation[2],
-                replace=False,
-                p=dist([player_score(pid) for pid in my_squad.attackers]),
-            )
-        )
-    )
+    team = select_team(my_squad, player_score)
 
     my_squad.select_team(team)
     score = sum(player_score(pid) for pid in my_squad.selection)
